@@ -120,7 +120,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>d</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -152,23 +152,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>235</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>497988</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\main.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\nrf52832_xxaa_s132\../../../main.c\235</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>266</LineNumber>
+          <LineNumber>269</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>498082</Address>
           <ByteObject>0</ByteObject>
@@ -179,7 +163,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\..\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\nrf52832_xxaa_s132\../../../main.c\266</Expression>
+          <Expression>\\nrf52832_xxaa_s132\../../../main.c\269</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>236</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>497988</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\nrf52832_xxaa_s132\../../../main.c\236</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>

@@ -51,6 +51,10 @@
 #include "nrf_log.h"
 #include "nrf_drv_wdt.h"
 
+#include "softdevice_handler.h"
+#include "nrf52.h"
+#include "nrf52_bitfields.h"
+
 #define USE_WATCH_DOG 0 //1使用看门狗 0不使用看门狗
 
 #if BUTTONS_NUMBER < 1
@@ -73,7 +77,7 @@
 
 #define SCHED_QUEUE_SIZE                20                                                      /**< Maximum number of events in the scheduler queue. */
 
-
+void rtc1_stop(void);
 /**@brief Callback function for asserts in the SoftDevice.
  *
  * @details This function will be called in case of an assert in the SoftDevice.
@@ -257,7 +261,6 @@ int main(void)
 
         scheduler_init();
     }
-
     dfu_start  = app_reset;
  //   dfu_start |= ((nrf_gpio_pin_read(BOOTLOADER_BUTTON) == 0) ? true: false); //按键控制强制进入蓝牙dfu状态
     
@@ -278,10 +281,26 @@ int main(void)
     if (bootloader_app_is_valid(DFU_BANK_0_REGION_START) && !bootloader_dfu_sd_in_progress())
     {
         wdt_feed();
+			  
+        //进入APP前将所有bootloader开启的外设关闭，防止影响app功耗
+        rtc1_stop();
+        softdevice_handler_sd_disable();
+
+			
         // Select a bank region to use as application region.
         // @note: Only applications running from DFU_BANK_0_REGION_START is supported.
         bootloader_app_start(DFU_BANK_0_REGION_START);
     }
     
     NVIC_SystemReset();
+}
+void rtc1_stop(void)
+{
+    NVIC_DisableIRQ(RTC1_IRQn);
+
+    NRF_RTC1->EVTENCLR = RTC_EVTEN_COMPARE0_Msk;
+    NRF_RTC1->INTENCLR = RTC_INTENSET_COMPARE0_Msk;
+
+    NRF_RTC1->TASKS_STOP = 1;
+    NRF_RTC1->TASKS_CLEAR = 1;
 }
