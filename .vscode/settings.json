@@ -1,0 +1,5 @@
+{
+    "files.associations": {
+        "nrf_mbr.h": "c"
+    }
+}
