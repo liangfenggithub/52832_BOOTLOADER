@@ -44,7 +44,7 @@
 #define DFU_SERVICE_HANDLE                   0x000C                                                  /**< Handle of DFU service when DFU service is first service initialized. */
 #define BLE_HANDLE_MAX                       0xFFFF                                                  /**< Max handle value is BLE. */
 
-#define DEVICE_NAME                          "DfuTarg"                                               /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                          "DfuWatch"                                               /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME                    "NordicSemiconductor"                                   /**< Manufacturer. Will be passed to Device Information Service. */
 
 #define MIN_CONN_INTERVAL                    (uint16_t)(MSEC_TO_UNITS(15, UNIT_1_25_MS))             /**< Minimum acceptable connection interval (11.25 milliseconds). */
@@ -961,12 +961,22 @@ static void gap_params_init(void)
     uint32_t                err_code;
     ble_gap_conn_params_t   gap_conn_params;
     ble_gap_conn_sec_mode_t sec_mode;
+    // uint32_t * name_use_sn = NULL;
+    // name_use_sn =  (uint32_t *)0x74000;
+    // char make_name[50];
+    // memset(make_name,0,sizeof(make_name));
+    // sprintf(make_name,"watch_dfu_%8x",(uint32_t)*name_use_sn);
+
 
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
     err_code = sd_ble_gap_device_name_set(&sec_mode,
                                           (const uint8_t *)DEVICE_NAME,
                                           strlen(DEVICE_NAME));
+    // err_code = sd_ble_gap_device_name_set(&sec_mode,
+    //                                       (const uint8_t *)make_name,
+    //                                       strlen(DEVICE_NAME));
+
     APP_ERROR_CHECK(err_code);
 
     memset(&gap_conn_params, 0, sizeof(gap_conn_params));

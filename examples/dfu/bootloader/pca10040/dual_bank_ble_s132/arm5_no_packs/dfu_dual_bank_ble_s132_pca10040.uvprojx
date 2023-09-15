@@ -564,11 +564,6 @@
               <FilePath>..\..\..\..\..\..\components\libraries\crc16\crc16.c</FilePath>
             </File>
             <File>
-              <FileName>dfu_dual_bank.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\bootloader_dfu\dfu_dual_bank.c</FilePath>
-            </File>
-            <File>
               <FileName>dfu_init_template.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\components\libraries\bootloader_dfu\dfu_init_template.c</FilePath>
@@ -587,6 +582,11 @@
               <FileName>nrf_assert.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\components\libraries\util\nrf_assert.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfu_single_bank.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\components\libraries\bootloader_dfu\dfu_single_bank.c</FilePath>
             </File>
           </Files>
         </Group>
