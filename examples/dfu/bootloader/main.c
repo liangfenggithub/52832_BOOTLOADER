@@ -198,8 +198,6 @@ nrf_drv_wdt_channel_id m_channel_id;
 void wdt_feed(void)
 {
     nrf_drv_wdt_feed();
-    nrf_gpio_pin_toggle(UPDATE_IN_PROGRESS_LED);
-
 }
 #endif
 
