@@ -55,7 +55,11 @@
 #include "nrf52.h"
 #include "nrf52_bitfields.h"
 
-#define USE_WATCH_DOG 0 //1使用看门狗 0不使用看门狗
+#define USE_WATCH_DOG 1 //1使用看门狗 0不使用看门狗
+
+#if(USE_WATCH_DOG == 1)
+APP_TIMER_DEF(watch_dog_clear_timer_id);                                  /**< Application timer id. */
+#endif
 
 #if BUTTONS_NUMBER < 1
 #error "Not enough buttons on board"
@@ -190,12 +194,22 @@ void wdt_event_handler(void)
 /**@brief Function for bootloader main entry.
  */
 nrf_drv_wdt_channel_id m_channel_id;
+#if (USE_WATCH_DOG==1)
 void wdt_feed(void)
 {
-#if (USE_WATCH_DOG==1)
     nrf_drv_wdt_feed();
-#endif
+    nrf_gpio_pin_toggle(UPDATE_IN_PROGRESS_LED);
+
 }
+#endif
+
+#if (USE_WATCH_DOG==1)
+void watch_dog_clear_timer_callback(void *p_context)
+{
+    wdt_feed();
+}
+#endif
+
 void watchDogInit(void)
 {
     uint32_t err_code;
@@ -225,18 +239,21 @@ int main(void)
     APP_ERROR_CHECK_BOOL(*((uint32_t *)NRF_UICR_BOOT_START_ADDRESS) == BOOTLOADER_REGION_START);
     APP_ERROR_CHECK_BOOL(NRF_FICR->CODEPAGESIZE == CODE_PAGE_SIZE);
 
-//    // Initialize.
 #if (USE_WATCH_DOG==1)
     watchDogInit();
 #endif
+
     timers_init();
+#if (USE_WATCH_DOG==1)
+    app_timer_create(&watch_dog_clear_timer_id, APP_TIMER_MODE_REPEATED, watch_dog_clear_timer_callback);
+    app_timer_start(watch_dog_clear_timer_id, APP_TIMER_TICKS(1000,APP_TIMER_PRESCALER), NULL);
+#endif
     buttons_init();
 
     (void)bootloader_init();
 
     if (bootloader_dfu_sd_in_progress())
     {
-        wdt_feed();
         nrf_gpio_pin_clear(UPDATE_IN_PROGRESS_LED);
 
         err_code = bootloader_dfu_sd_update_continue();
@@ -252,7 +269,6 @@ int main(void)
     }
     else
     {
-        wdt_feed();
         // If stack is present then continue initialization of bootloader.
         // ble_stack_init(!app_reset);
         ble_stack_init(1); //editbylf 使用不带蓝牙APP跳转时实测复位第一次进入此函数软件协议栈初始化会失败然后再次重启，导致无法听你留在dfu中，因此这里写死，每次都初始化，就可以成功。
@@ -268,7 +284,6 @@ int main(void)
     
     if (dfu_start || (!bootloader_app_is_valid(DFU_BANK_0_REGION_START)))
     {
-        wdt_feed();
         nrf_gpio_pin_clear(UPDATE_IN_PROGRESS_LED);
 
         // Initiate an update of the firmware.
@@ -280,7 +295,6 @@ int main(void)
 
     if (bootloader_app_is_valid(DFU_BANK_0_REGION_START) && !bootloader_dfu_sd_in_progress())
     {
-        wdt_feed();
 			  
         //进入APP前将所有bootloader开启的外设关闭，防止影响app功耗
         rtc1_stop();

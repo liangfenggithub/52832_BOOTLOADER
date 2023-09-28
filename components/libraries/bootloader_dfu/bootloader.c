@@ -66,7 +66,6 @@ static void pstorage_callback_handler(pstorage_handle_t * p_handle,
     APP_ERROR_CHECK(result);
 }
 
-
 /**@brief   Function for waiting for events.
  *
  * @details This function will place the chip in low power mode while waiting for events from
@@ -79,8 +78,7 @@ static void wait_for_events(void)
 {
     for (;;)
     {
-			
-        wdt_feed();//by lcy 20221103 ����ι��
+		
         // Wait in low power state for any events.
         uint32_t err_code = sd_app_evt_wait();
         APP_ERROR_CHECK(err_code);
